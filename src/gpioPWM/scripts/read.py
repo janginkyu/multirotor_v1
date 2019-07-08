@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 
+from time import sleep
 from datetime import datetime
 import RPi.GPIO as gpio
 
@@ -30,7 +31,7 @@ def gpioPinEvent(pinNum, is_rise=False):
 
 def makeCb(pinNum):
     def cb(channel):
-        if gpio.input(pinNum) == 0:
+        if gpio.input(pinNum) == 0: 
             gpioPinEvent(pinNum, False)
         else:
             gpioPinEvent(pinNum, True)
@@ -41,7 +42,10 @@ def publisher():
     for pinNum in readPin:
         gpio.setup(pinNum, gpio.IN)
         pub[pinNum] = rospy.Publisher('/jik/rpi/gpio/' + str(pinNum), UInt32, queue_size=10)
-        gpio.add_event_detect(pinNum, gpio.BOTH, callback=makeCb(pinNum))
+        gpio.add_event_detect(pinNum, gpio.BOTH, callback=makeCb(pinNum), bouncetime=1)
+        dataRefresh[pinNum] = False
+        isUp[pinNum] = False
+
     
     rospy.loginfo('GPIO pin init complete.')
     rospy.loginfo('input pin numbers : ')
@@ -54,6 +58,7 @@ def publisher():
         for pinNum in readPin:
             if dataRefresh[pinNum]:
                 pub[pinNum].publish(dTime[pinNum])
+                dataRefresh[pinNum] = False
         rate.sleep()
 
 if __name__ == '__main__':
