@@ -17,8 +17,9 @@ pub = {}
 
 def gpioPinEvent(pinNum, is_rise=False):
     if is_rise:
-        riseTime[pinNum] = datetime.utcnow().microsecond
-        isUp[pinNum] = True
+        if not isUp[pinNum]:
+            riseTime[pinNum] = datetime.utcnow().microsecond
+            isUp[pinNum] = True
     else:
         if isUp[pinNum]:
             dTime[pinNum] = datetime.utcnow().microsecond - riseTime[pinNum]
@@ -45,7 +46,7 @@ def publisher():
     for pinNum in readPin:
         gpio.setup(pinNum, gpio.IN)
         pub[pinNum] = rospy.Publisher('/jik/rpi/gpio/' + str(pinNum), UInt32, queue_size=10)
-        gpio.add_event_detect(pinNum, gpio.BOTH, callback=makeCb(pinNum))
+        gpio.add_event_detect(pinNum, gpio.BOTH, callback=makeCb(pinNum), bouncetime=1)
         dataRefresh[pinNum] = False
         isUp[pinNum] = False
 
