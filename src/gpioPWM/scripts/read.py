@@ -22,13 +22,7 @@ def gpioPinEvent(pinNum, is_rise=False):
             isUp[pinNum] = True
     else:
         if isUp[pinNum]:
-            temp = datetime.utcnow().microsecond - riseTime[pinNum]
-            if temp < 0:
-                temp += 1000000
-            if abs(dTime[pinNum] - temp) > 100:
-                pass
-            else:
-                dTime[pinNum] = temp
+            dTime[pinNum] = datetime.utcnow().microsecond - riseTime[pinNum]
             isUp[pinNum] = False
             dataRefresh[pinNum] = True
         else:
