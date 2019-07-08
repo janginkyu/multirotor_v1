@@ -2,6 +2,7 @@
 
 from time import sleep
 from datetime import datetime
+import threading
 import RPi.GPIO as gpio
 
 # ros
@@ -40,6 +41,15 @@ def makeCb(pinNum):
             gpioPinEvent(pinNum, True)
     return cb
 
+def read():
+    for pinNum in readPin:
+        gpio.add_event_detect(pinNum, gpio.BOTH, callback=makeCb(pinNum))
+        dataRefresh[pinNum] = False
+        isUp[pinNum] = False
+    while True:
+        pass
+
+
 def publisher():
     rospy.init_node('gpioRead', anonymous=True)
 
@@ -47,9 +57,9 @@ def publisher():
     for pinNum in readPin:
         gpio.setup(pinNum, gpio.IN)
         pub[pinNum] = rospy.Publisher('/jik/rpi/gpio/' + str(pinNum), UInt32, queue_size=10)
-        gpio.add_event_detect(pinNum, gpio.BOTH, callback=makeCb(pinNum))
-        dataRefresh[pinNum] = False
-        isUp[pinNum] = False
+    
+    readThread = threading.Thread(target=read)
+    readThread.start()
 
     rospy.loginfo('GPIO pin init complete.')
     rospy.loginfo('input pin numbers : ')
