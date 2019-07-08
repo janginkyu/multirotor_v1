@@ -1,1 +1,1 @@
-/usr/bin/c++ -fPIC   -shared -Wl,-soname,libgtest.so -o libgtest.so CMakeFiles/gtest.dir/src/gtest-all.cc.o  -L/home/janginkyu/rpi_ws/build/gtest/googlemock/gtest/src -Wl,-rpath,/home/janginkyu/rpi_ws/build/gtest/googlemock/gtest/src -lpthread 
+/usr/bin/c++ -fPIC   -shared -Wl,-soname,libgtest.so -o libgtest.so CMakeFiles/gtest.dir/src/gtest-all.cc.o  -L/home/larr/multirotor_v1/build/gtest/googlemock/gtest/src -Wl,-rpath,/home/larr/multirotor_v1/build/gtest/googlemock/gtest/src -lpthread 

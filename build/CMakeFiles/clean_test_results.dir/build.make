@@ -43,10 +43,10 @@ RM = /usr/bin/cmake -E remove -f
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/janginkyu/rpi_ws/src
+CMAKE_SOURCE_DIR = /home/larr/multirotor_v1/src
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/janginkyu/rpi_ws/build
+CMAKE_BINARY_DIR = /home/larr/multirotor_v1/build
 
 # Utility rule file for clean_test_results.
 
@@ -54,7 +54,7 @@ CMAKE_BINARY_DIR = /home/janginkyu/rpi_ws/build
 include CMakeFiles/clean_test_results.dir/progress.make
 
 CMakeFiles/clean_test_results:
-	/usr/bin/python2 /opt/ros/melodic/share/catkin/cmake/test/remove_test_results.py /home/janginkyu/rpi_ws/build/test_results
+	/usr/bin/python2 /opt/ros/melodic/share/catkin/cmake/test/remove_test_results.py /home/larr/multirotor_v1/build/test_results
 
 clean_test_results: CMakeFiles/clean_test_results
 clean_test_results: CMakeFiles/clean_test_results.dir/build.make
@@ -71,6 +71,6 @@ CMakeFiles/clean_test_results.dir/clean:
 .PHONY : CMakeFiles/clean_test_results.dir/clean
 
 CMakeFiles/clean_test_results.dir/depend:
-	cd /home/janginkyu/rpi_ws/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/janginkyu/rpi_ws/src /home/janginkyu/rpi_ws/src /home/janginkyu/rpi_ws/build /home/janginkyu/rpi_ws/build /home/janginkyu/rpi_ws/build/CMakeFiles/clean_test_results.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/larr/multirotor_v1/build && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/larr/multirotor_v1/src /home/larr/multirotor_v1/src /home/larr/multirotor_v1/build /home/larr/multirotor_v1/build /home/larr/multirotor_v1/build/CMakeFiles/clean_test_results.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/clean_test_results.dir/depend
 

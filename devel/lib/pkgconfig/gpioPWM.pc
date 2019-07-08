@@ -1,0 +1,8 @@
+prefix=/home/larr/multirotor_v1/devel
+
+Name: gpioPWM
+Description: Description of gpioPWM
+Version: 0.0.0
+Cflags: 
+Libs: -L/home/larr/multirotor_v1/devel/lib 
+Requires: message_runtime

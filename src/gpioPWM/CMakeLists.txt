@@ -4,18 +4,18 @@ find_package(catkin REQUIRED cmake_modules)
 find_package(catkin REQUIRED COMPONENTS
 	geometry_msgs
 	roscpp rospy std_msgs std_srvs genmsg
-	message_generation
+	#	message_generation
 )
 find_package(Eigen REQUIRED)
 
 catkin_package(CATKIN_DEPENDS message_runtime)
-add_message_files(
-	FILES gpioPWM.msg
-)
+#add_message_files(
+#	FILES gpioPWM.msg
+#)
 
-generate_messages(
-	DEPENDENCIES std_msgs
-)
+#generate_messages(
+#	DEPENDENCIES std_msgs
+#)
 
 #add_executable(pioneer_path src/circle.cpp)
 #target_link_libraries(pioneer_path ${catkin_LIBRARIES})
