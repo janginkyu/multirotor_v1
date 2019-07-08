@@ -59,7 +59,7 @@ def publisher():
             if dataRefresh[pinNum]:
                 pub[pinNum].publish(dTime[pinNum])
                 dataRefresh[pinNum] = False
-                rospy.loginfo(str(dTime[pinNum]))
+                rospy.loginfo((' ' * (dTime[pinNum] / 100)) + '*')
         rate.sleep()
 
 if __name__ == '__main__':
