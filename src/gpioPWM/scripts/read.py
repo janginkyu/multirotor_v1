@@ -26,7 +26,6 @@ def gpioPinEvent(pinNum, is_rise=False):
             dTime[pinNum] = datetime.utcnow().microsecond - riseTime[pinNum]
             if dTime[pinNum] < 0:
                 dTime[pinNum] += 1000000
-            temp.append(dTime[pinNum])
             isUp[pinNum] = False
             dataRefresh[pinNum] = True
         else:
