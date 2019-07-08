@@ -31,6 +31,7 @@ def gpioPinEvent(pinNum, is_rise=False):
 
 def makeCb(pinNum):
     def cb(channel):
+        rospy.loginfo('cb ' + str(gpio.input(pinNum)))
         if gpio.input(pinNum) == 0: 
             gpioPinEvent(pinNum, False)
         else:
@@ -38,21 +39,21 @@ def makeCb(pinNum):
     return cb
 
 def publisher():
+    rospy.init_node('gpioRead', anonymous=True)
+
     gpio.setmode(gpio.BCM)
     for pinNum in readPin:
         gpio.setup(pinNum, gpio.IN)
         pub[pinNum] = rospy.Publisher('/jik/rpi/gpio/' + str(pinNum), UInt32, queue_size=10)
-        gpio.add_event_detect(pinNum, gpio.BOTH, callback=makeCb(pinNum), bouncetime=1)
+        gpio.add_event_detect(pinNum, gpio.BOTH, callback=makeCb(pinNum))
         dataRefresh[pinNum] = False
         isUp[pinNum] = False
 
-    
     rospy.loginfo('GPIO pin init complete.')
     rospy.loginfo('input pin numbers : ')
     for pinNum in readPin:
         print(str(pinNum) + ' ')
 
-    rospy.init_node('gpioRead', anonymous=True)
     rate = rospy.Rate(200)
     while not rospy.is_shutdown():
         for pinNum in readPin:
