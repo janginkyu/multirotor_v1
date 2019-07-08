@@ -15,8 +15,6 @@ dTime = {}
 dataRefresh = {}
 pub = {}
 
-temp = [0]
-
 def gpioPinEvent(pinNum, is_rise=False):
     if is_rise:
         if not isUp[pinNum]:
@@ -59,14 +57,11 @@ def publisher():
         print(str(pinNum) + ' ')
 
     rate = rospy.Rate(40)
-    temp = []
     while not rospy.is_shutdown():
         for pinNum in readPin:
             if dataRefresh[pinNum]:
                 pub[pinNum].publish(dTime[pinNum])
                 dataRefresh[pinNum] = False
-                print(temp)
-                temp = []
         rate.sleep()
 
 if __name__ == '__main__':
