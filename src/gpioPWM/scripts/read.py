@@ -48,6 +48,14 @@ def read():
     while True:
         pass
 
+def publish():
+    rate = rospy.Rate(40)
+    while not rospy.is_shutdown():
+        for pinNum in readPin:
+            if dataRefresh[pinNum]:
+                pub[pinNum].publish(dTime[pinNum])
+                dataRefresh[pinNum] = False
+        rate.sleep()
 
 def publisher():
     rospy.init_node('gpioRead', anonymous=True)
@@ -65,13 +73,8 @@ def publisher():
     for pinNum in readPin:
         print(str(pinNum) + ' ')
 
-    rate = rospy.Rate(40)
-    while not rospy.is_shutdown():
-        for pinNum in readPin:
-            if dataRefresh[pinNum]:
-                pub[pinNum].publish(dTime[pinNum])
-                dataRefresh[pinNum] = False
-        rate.sleep()
+    publishThread = threading.Thread(target=publish)
+    publishThread.start()
 
 if __name__ == '__main__':
     try:
