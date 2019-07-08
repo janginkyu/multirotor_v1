@@ -7,7 +7,7 @@ import RPi.GPIO as gpio
 import rospy
 from std_msgs.msg import UInt32
 
-readPin = {}
+readPin = [14]
 riseTime = {}
 isUp = {}
 dTime = {}
@@ -29,7 +29,7 @@ def gpioPinEvent(pinNum, is_rise=False):
             pass
 
 def makeCb(pinNum, is_rise=False):
-    def cb():
+    def cb(channel):
         gpioPinEvent(pinNum, is_rise)
     return cb
 
@@ -38,8 +38,8 @@ def publisher():
     for pinNum in readPin:
         gpio.setup(pinNum, gpio.IN)
         pub[pinNum] = rospy.Publisher('/jik/rpi/gpio/' + str(pinNum), UInt32, queue_size=10)
-        gpio.add_event_detect(pinNum, gpio.rising, callback=makeCb(pinNum, True))
-        gpio.add_event_detect(pinNum, gpio.rising, callback=makeCb(pinNum, False))
+        gpio.add_event_detect(pinNum, gpio.RISING, callback=makeCb(pinNum, True))
+        gpio.add_event_detect(pinNum, gpio.FALLING, callback=makeCb(pinNum, False))
     
     rospy.loginfo('GPIO pin init complete.')
     rospy.loginfo('input pin numbers : ')
