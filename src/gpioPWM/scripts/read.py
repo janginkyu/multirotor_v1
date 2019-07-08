@@ -8,12 +8,15 @@ import RPi.GPIO as gpio
 import rospy
 from std_msgs.msg import UInt32
 
-readPin = [14]
+readPin = [18]
 riseTime = {}
 isUp = {}
 dTime = {}
 dataRefresh = {}
 pub = {}
+dTimeSum = {}
+dTimeNum = {}
+prevDat = {}
 
 def gpioPinEvent(pinNum, is_rise=False):
     if is_rise:
@@ -22,9 +25,16 @@ def gpioPinEvent(pinNum, is_rise=False):
             isUp[pinNum] = True
     else:
         if isUp[pinNum]:
-            dTime[pinNum] = datetime.utcnow().microsecond - riseTime[pinNum]
+            temp = datetime.utcnow().microsecond - riseTime[pinNum]
+            if temp < 0:
+                temp += 1000000
+            if (temp > 900) and (temp < 2100):
+                if (prevDat[pinNum] == -1) or (abs(prevDat[pinNum] - temp) < 100):
+                    dTimeSum[pinNum] += temp
+                    dTimeNum[pinNum] += 1
+                    dataRefresh[pinNum] = True
+                prevDat[pinNum] = temp
             isUp[pinNum] = False
-            dataRefresh[pinNum] = True
         else:
             pass
 
@@ -47,18 +57,25 @@ def publisher():
         gpio.add_event_detect(pinNum, gpio.BOTH, callback=makeCb(pinNum))
         dataRefresh[pinNum] = False
         isUp[pinNum] = False
+        dTimeSum[pinNum] = 0
+        dTimeNum[pinNum] = 0
+        dTime[pinNum] = 0
+        prevDat[pinNum] = -1
 
     rospy.loginfo('GPIO pin init complete.')
     rospy.loginfo('input pin numbers : ')
     for pinNum in readPin:
         print(str(pinNum) + ' ')
 
-    rate = rospy.Rate(40)
+    rate = rospy.Rate(20)
     while not rospy.is_shutdown():
         for pinNum in readPin:
             if dataRefresh[pinNum]:
+                dTime[pinNum] = dTimeSum[pinNum] / dTimeNum[pinNum]
                 pub[pinNum].publish(dTime[pinNum])
                 dataRefresh[pinNum] = False
+                dTimeSum[pinNum] = 0
+                dTimeNum[pinNum] = 0
                 rospy.loginfo((' ' * ((dTime[pinNum] - 800) / 40)) + '*')
         rate.sleep()
 
